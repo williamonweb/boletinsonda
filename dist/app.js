@@ -100,23 +100,16 @@ document.querySelector('#historyList').addEventListener('click',event=>{
 
 async function sheetPng(){
   const node=document.querySelector('.sheet');
-  const clone=node.cloneNode(true);clone.querySelectorAll('input').forEach((el,i)=>{const src=node.querySelectorAll('input')[i];el.setAttribute('value',src.value);if(src.checked)el.setAttribute('checked','checked');else el.removeAttribute('checked')});
-  clone.querySelectorAll('textarea').forEach((el,i)=>el.textContent=node.querySelectorAll('textarea')[i].value);
-  const sourceImage=node.querySelector('#petImage');
-  const imageBlob=await fetch(sourceImage.src).then(r=>r.blob());
-  const imageData=await new Promise(resolve=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.readAsDataURL(imageBlob)});
-  clone.querySelector('#petImage').src=imageData;
-  clone.style.cssText='width:794px;min-height:1123px;margin:0;box-shadow:none;background:#fff';
-  const css=[...document.styleSheets].map(s=>{try{return[...s.cssRules].map(r=>r.cssText).join('')}catch{return''}}).join('');
-  const serializer=new XMLSerializer();const html=serializer.serializeToString(clone);
-  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="794" height="1123"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml"><style>${css}</style>${html}</div></foreignObject></svg>`;
-  const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'}),url=URL.createObjectURL(blob),img=new Image();
-  await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=url});
-  const canvas=document.createElement('canvas');canvas.width=1588;canvas.height=2246;const ctx=canvas.getContext('2d');ctx.scale(2,2);ctx.fillStyle='#fff';ctx.fillRect(0,0,794,1123);ctx.drawImage(img,0,0);URL.revokeObjectURL(url);
-  return await new Promise(resolve=>canvas.toBlob(resolve,'image/png',1));
+  if(typeof html2canvas!=='function')throw new Error('Gerador de imagem indisponível');
+  const previousTransform=node.style.transform,previousMargin=node.style.marginBottom;
+  node.style.transform='none';node.style.marginBottom='0';
+  try{
+    const canvas=await html2canvas(node,{scale:2,useCORS:true,allowTaint:false,backgroundColor:'#ffffff',logging:false,width:794,height:1123,windowWidth:1200,scrollX:0,scrollY:0});
+    return await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Não foi possível criar a imagem')),'image/png',1));
+  }finally{node.style.transform=previousTransform;node.style.marginBottom=previousMargin}
 }
 function filename(ext){const pet=(form.elements.paciente.value||'paciente').trim().replace(/[^a-z0-9à-ú]+/gi,'-');return`boletim-${state.species}-${pet}.${ext}`.toLowerCase()}
-async function exportPng(download=true){if(!await saveBulletin(true))return null;try{showToast('Gerando imagem…');const blob=await sheetPng();if(download){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename('png');a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);showToast('Imagem pronta para enviar')}return blob}catch(e){console.error(e);showToast('Use “Imprimir / salvar PDF” neste navegador');throw e}}
+async function exportPng(download=true){if(!await saveBulletin(true))return null;try{showToast('Gerando imagem…');const blob=await sheetPng();if(download){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename('png');a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);showToast('Download da imagem iniciado')}return blob}catch(e){console.error(e);showToast('Não foi possível gerar a imagem. Tente novamente.');throw e}}
 document.querySelector('#pngBtn').addEventListener('click',()=>exportPng(true));
 document.querySelector('#shareBtn').addEventListener('click',async()=>{
   try{
