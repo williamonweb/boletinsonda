@@ -1,0 +1,14 @@
+{
+  "name": "onda-animal-boletins",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sistema de boletins de internação felina e canina da Onda Animal",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2"
+  }
+}

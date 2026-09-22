@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#076b6c" />
+  <meta name="description" content="Boletins digitais de internação felina e canina da Onda Animal." />
+  <title>Onda Animal • Boletim de Internação</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23076b6c'/%3E%3Ccircle cx='19' cy='22' r='7' fill='white'/%3E%3Ccircle cx='34' cy='16' r='7' fill='white'/%3E%3Ccircle cx='48' cy='22' r='7' fill='white'/%3E%3Cpath d='M14 43c0-10 8-17 18-17s18 7 18 17c0 7-7 9-18 9s-18-2-18-9Z' fill='white'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="appbar">
+    <div class="brand"><span class="paw">●</span><div><strong>ONDA ANIMAL</strong><small>Central de internação</small></div></div>
+    <div class="appbar-actions">
+      <div class="saved" id="saveStatus" aria-live="polite"><span></span> Alterações salvas</div>
+      <a class="admin-link" href="/admin" aria-label="Abrir painel administrativo">⚙ ADM</a>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="toolbar" aria-label="Controles do boletim">
+      <div>
+        <p class="eyebrow">NOVO BOLETIM</p>
+        <h1>Atualização do paciente</h1>
+        <p class="intro">Preencha, confira a prévia e envie ao tutor.</p>
+      </div>
+
+      <fieldset class="species-control">
+        <legend>Tipo de internação</legend>
+        <label><input type="radio" name="species" value="canina" checked><span>🐶 Canina</span></label>
+        <label><input type="radio" name="species" value="felina"><span>🐱 Felina</span></label>
+      </fieldset>
+
+      <div class="shift-control">
+        <label>Período</label>
+        <div class="segmented">
+          <label><input type="radio" name="shift" value="manha" checked><span>☀️ Manhã</span></label>
+          <label><input type="radio" name="shift" value="tarde"><span>🌙 Tarde/noite</span></label>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="saveBtn">Salvar boletim</button>
+        <button id="pngBtn">Salvar imagem</button>
+        <button id="pdfBtn">Imprimir / salvar PDF</button>
+        <button id="shareBtn" class="share">Enviar ao tutor</button>
+        <button id="clearBtn" class="danger">＋ Novo boletim</button>
+      </div>
+
+      <div class="tip"><strong>Pronto para WhatsApp</strong><br>No celular, escolha o contato pelo menu de compartilhamento. No computador, a imagem será baixada antes de abrir o WhatsApp.</div>
+
+      <section class="history-panel" aria-labelledby="historyTitle">
+        <div class="history-heading">
+          <div><span>HISTÓRICO</span><h2 id="historyTitle">Últimos boletins</h2></div>
+          <strong id="historyCount">0</strong>
+        </div>
+        <label class="history-search"><span>⌕</span><input id="historySearch" type="search" placeholder="Buscar tutor ou animal" autocomplete="off"></label>
+        <button class="report-btn" id="reportBtn" type="button">↓ Baixar relatório do histórico</button>
+        <div class="history-list" id="historyList"></div>
+      </section>
+    </aside>
+
+    <section class="preview-shell">
+      <div class="preview-top"><span>Prévia do boletim</span><span>A4 • vertical</span></div>
+      <form id="bulletin" class="sheet" autocomplete="off">
+        <header class="sheet-header">
+          <div class="heading">
+            <h2>BOLETIM DE<br>INTERNAÇÃO <span data-species-title>CANINA</span></h2>
+            <p>INFORMAÇÃO, CUIDADO E TRANSPARÊNCIA<br>PARA VOCÊ E SEU PET</p>
+          </div>
+          <div class="pet-window" aria-hidden="true">
+            <span class="pet-halo"></span>
+            <img id="petImage" src="pet-canino.png" alt="">
+          </div>
+          <div class="header-marks">♡<small>●</small></div>
+        </header>
+
+        <div class="shift-row">
+          <label class="sun">☀️ <b>BOLETIM DA MANHÃ</b><input class="bigcheck" type="checkbox" data-mirror-shift="manha"></label>
+          <label class="moon">🌙 <b>BOLETIM DA TARDE/NOITE</b><input class="bigcheck" type="checkbox" data-mirror-shift="tarde"></label>
+        </div>
+
+        <section class="patient-grid panel pale-blue">
+          <label>Paciente: <input name="paciente" required></label>
+          <label>Data: <input name="data" type="date"></label>
+          <label>Horário: <input name="horario" type="time"></label>
+          <label>Tutor(a): <input name="tutor"></label>
+          <label class="vet">Veterinário(a): <input name="veterinario"></label>
+        </section>
+
+        <div class="sheet-columns">
+          <div class="column">
+            <section class="panel pink"><h3><span>♥</span> ESTADO GERAL</h3><div class="checks one" data-group="estado"></div></section>
+            <section class="panel yellow"><h3><span>💧</span> ÁGUA</h3><div class="checks one" data-group="agua"></div></section>
+            <section class="panel mint"><h3><span>●</span> COCÔ (FEZES)</h3><div class="checks two" data-group="fezes"></div></section>
+            <section class="panel blue behavior"><h3><span data-animal-icon>🐶</span> COMPORTAMENTO</h3><div class="checks one" data-group="comportamento"></div><div class="pet-line" data-animal-icon>🐶</div></section>
+          </div>
+          <div class="column">
+            <section class="panel mint"><h3><span>◉</span> ALIMENTAÇÃO</h3><h4>Apetite:</h4><div class="checks three" data-group="apetite"></div><h4>Tipo de alimentação:</h4><div class="checks two" data-group="alimentacao"></div></section>
+            <section class="panel lavender"><h3><span>▰</span> XIXI (URINA)</h3><div class="checks three" data-group="urina"></div></section>
+            <section class="panel pink"><h3><span>💊</span> MEDICAÇÕES</h3><div class="checks one" data-group="medicacao"></div><h4>Frequência:</h4><div class="checks four" data-group="frequencia"></div><label class="other"><input type="checkbox" name="outrosCheck"> Outros: <input name="outros" type="text"></label></section>
+            <section class="panel cream observations"><h3><span>▤</span> OBSERVAÇÕES DA EQUIPE</h3><textarea name="observacoes" maxlength="420" aria-label="Observações da equipe"></textarea></section>
+          </div>
+        </div>
+
+        <footer class="sheet-footer"><div class="logo-paw">●</div><strong>ONDA</strong><div class="wave"></div><span>♡</span><span>🐾</span></footer>
+      </form>
+    </section>
+  </main>
+
+  <dialog class="responsible-dialog" id="responsibleDialog">
+    <form method="dialog" id="responsibleForm">
+      <div class="dialog-icon">👤</div>
+      <p class="dialog-eyebrow">CONTROLE INTERNO</p>
+      <h2>Quem está realizando este boletim?</h2>
+      <p>O nome ficará salvo somente no histórico da gerência e não aparecerá na imagem enviada ao tutor.</p>
+      <label>Nome do responsável<input id="responsibleInput" type="text" required autocomplete="name" placeholder="Digite seu nome completo"></label>
+      <div class="dialog-actions">
+        <button type="submit" value="cancel" formnovalidate class="dialog-cancel">Cancelar</button>
+        <button type="submit" value="confirm" class="dialog-confirm">Confirmar e continuar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="share-dialog" id="shareDialog">
+    <div class="share-dialog-content">
+      <div class="dialog-icon">✓</div>
+      <p class="dialog-eyebrow">IMAGEM SALVA</p>
+      <h2>Agora escolha o tutor</h2>
+      <p>A imagem do boletim foi baixada. Abra o WhatsApp, escolha o contato do tutor e anexe a imagem baixada.</p>
+      <div class="share-dialog-actions">
+        <button type="button" id="closeShareDialog">Voltar</button>
+        <a id="openWhatsapp" href="https://wa.me/" target="_blank" rel="noopener">Abrir WhatsApp</a>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>

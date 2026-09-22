@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#076b6c">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Administração • Boletins Onda Animal</title>
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+  <section class="login-view" id="loginView">
+    <form class="login-card" id="loginForm">
+      <div class="admin-mark">🐾</div>
+      <p class="eyebrow">ONDA ANIMAL</p>
+      <h1>Painel administrativo</h1>
+      <p class="sub">Acesso exclusivo da gerência.</p>
+      <label>Usuário<input id="loginUser" autocomplete="username" required></label>
+      <label>Senha<input id="loginPassword" type="password" autocomplete="current-password" required></label>
+      <p class="form-error" id="loginError" role="alert"></p>
+      <button type="submit">Entrar no painel</button>
+      <a href="/">← Voltar aos boletins</a>
+    </form>
+  </section>
+
+  <main class="dashboard" id="dashboard" hidden>
+    <header class="topbar">
+      <a class="brand" href="/"><span>🐾</span><div><strong>ONDA ANIMAL</strong><small>Gestão de boletins</small></div></a>
+      <div class="top-actions"><a href="/">Novo boletim</a><button id="logoutBtn">Sair</button></div>
+    </header>
+    <div class="content">
+      <div class="page-head"><div><p class="eyebrow">CONTROLE INTERNO</p><h1>Boletins de internação</h1><p>Acompanhe todos os envios realizados pela equipe.</p></div><button class="export-btn" id="exportBtn">↓ Exportar relatório CSV</button></div>
+      <section class="metrics" aria-label="Resumo dos boletins">
+        <article><span>Total de boletins</span><strong id="metricTotal">0</strong></article>
+        <article><span>Boletins hoje</span><strong id="metricToday">0</strong></article>
+        <article><span>Caninos</span><strong id="metricCanine">0</strong></article>
+        <article><span>Felinos</span><strong id="metricFeline">0</strong></article>
+      </section>
+      <section class="records-panel">
+        <div class="filters">
+          <label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Buscar animal, tutor, veterinário ou responsável"></label>
+          <label>Data<input id="dateFilter" type="date"></label>
+          <label>Espécie<select id="speciesFilter"><option value="">Todas</option><option value="canina">Canina</option><option value="felina">Felina</option></select></label>
+          <button id="clearFilters">Limpar filtros</button>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Data</th><th>Paciente e tutor</th><th>Internação</th><th>Veterinário</th><th>Responsável</th><th>Registro</th><th></th></tr></thead><tbody id="recordsBody"></tbody></table>
+          <div class="empty" id="emptyState" hidden><span>📋</span><strong>Nenhum boletim encontrado</strong><small>Os registros enviados pela equipe aparecerão aqui.</small></div>
+        </div>
+        <footer class="records-footer"><span id="resultCount">0 registros</span><span>Dados centralizados no Neon</span></footer>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="detailDialog" class="detail-dialog"><div class="detail-shell"><button class="close-detail" id="closeDetail" aria-label="Fechar">×</button><div id="detailContent"></div></div></dialog>
+  <div class="toast" id="adminToast"></div>
+  <script src="/admin.js"></script>
+</body>
+</html>

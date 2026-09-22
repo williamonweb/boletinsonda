@@ -1,0 +1,7 @@
+node_modules/
+.vercel/
+.env
+.env.local
+.env.*.local
+*.tar.gz
+.DS_Store
