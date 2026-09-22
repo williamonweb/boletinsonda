@@ -13,8 +13,9 @@ const safe=value=>String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'
 const formatDate=value=>{if(!value)return'Sem data';const date=new Date(`${String(value).slice(0,10)}T12:00:00`);return isNaN(date)?value:date.toLocaleDateString('pt-BR')};
 const showToast=message=>{toast.textContent=message;toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('show'),2600)};
 async function request(url,options={}){const response=await fetch(url,{...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});const data=await response.json().catch(()=>({}));if(!response.ok)throw Object.assign(new Error(data.error||'Não foi possível concluir.'),{status:response.status});return data}
-function showLogin(message=''){loginView.hidden=false;dashboard.hidden=true;document.querySelector('#loginError').textContent=message}
-function showDashboard(){loginView.hidden=true;dashboard.hidden=false}
+function setAdminRoute(path){if(location.pathname!==path)history.replaceState({},'',path)}
+function showLogin(message=''){loginView.hidden=false;dashboard.hidden=true;document.querySelector('#loginError').textContent=message;setAdminRoute('/admin')}
+function showDashboard(){loginView.hidden=true;dashboard.hidden=false;setAdminRoute('/admin/painel');scrollTo(0,0)}
 async function load(){try{const data=await request('/api/bulletins');bulletins=data.bulletins||[];showDashboard();render()}catch(error){if(error.status===401)showLogin();else showLogin(error.message)}}
 document.querySelector('#loginForm').addEventListener('submit',async event=>{event.preventDefault();const button=event.submitter;button.disabled=true;document.querySelector('#loginError').textContent='';try{await request('/api/auth/login',{method:'POST',body:JSON.stringify({user:document.querySelector('#loginUser').value,password:document.querySelector('#loginPassword').value})});await load()}catch(error){showLogin(error.message)}finally{button.disabled=false}});
 document.querySelector('#logoutBtn').addEventListener('click',async()=>{await request('/api/auth/logout',{method:'POST'}).catch(()=>{});showLogin();document.querySelector('#loginForm').reset()});
