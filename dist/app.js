@@ -2,7 +2,7 @@ const groups={
   estado:['Estável','Apresenta melhora','Requer cuidados e acompanhamento','Estado delicado'],
   agua:['Bebeu normalmente','Bebeu pouco','Não bebeu espontaneamente'],
   fezes:['Sim','Normal','Não','Amolecido','Em observação','Diarreia'],
-  comportamento:['Alerta/ativo','Tranquilo','Carinhoso/receptivo','Assustado/estressado','Sonolento','Em observação'],
+  comportamento:['Alerta/ativo','Tranquilo','Carinhoso/receptivo','Assustado/estressado','Sonolento','Em observação','Prostrado','Apático'],
   apetite:['Normal','Comeu pouco','Não quis comer'],
   alimentacao:['Ração seca','Ração úmida/pastosa','Dieta especial','Alimentação assistida'],
   urina:['Sim','Não','Em observação'],
