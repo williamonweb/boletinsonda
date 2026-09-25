@@ -6,7 +6,7 @@ const groupLabels={
   fezes:['Sim','Normal','Não','Amolecido','Em observação','Diarreia'],
   comportamento:['Alerta/ativo','Tranquilo','Carinhoso/receptivo','Assustado/estressado','Sonolento','Em observação'],
   apetite:['Normal','Comeu pouco','Não quis comer'],alimentacao:['Ração seca','Ração úmida/pastosa','Dieta especial','Alimentação assistida'],
-  urina:['Sim','Não','Em observação'],medicacao:['Medicações realizadas conforme prescrição'],frequencia:['1x ao dia','2x ao dia','3x ao dia','4x ao dia']
+  urina:['Sim','Não','Em observação'],medicacao:['Medicações realizadas conforme prescrição'],frequencia:['Manhã','Tarde','Noite','Madrugada']
 };
 const groupTitles={estado:'Estado geral',agua:'Água',fezes:'Fezes',comportamento:'Comportamento',apetite:'Apetite',alimentacao:'Alimentação',urina:'Urina',medicacao:'Medicações',frequencia:'Frequência'};
 const safe=value=>String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));

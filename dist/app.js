@@ -7,7 +7,7 @@ const groups={
   alimentacao:['Ração seca','Ração úmida/pastosa','Dieta especial','Alimentação assistida'],
   urina:['Sim','Não','Em observação'],
   medicacao:['Medicações realizadas conforme prescrição'],
-  frequencia:['1x ao dia','2x ao dia','3x ao dia','4x ao dia']
+  frequencia:['Manhã','Tarde','Noite','Madrugada']
 };
 const form=document.querySelector('#bulletin'),toast=document.querySelector('#toast'),statusEl=document.querySelector('#saveStatus');
 const HISTORY_KEY='onda-boletins-history';
@@ -104,7 +104,16 @@ async function sheetPng(){
   const previousTransform=node.style.transform,previousMargin=node.style.marginBottom;
   node.style.transform='none';node.style.marginBottom='0';
   try{
-    const canvas=await html2canvas(node,{scale:2,useCORS:true,allowTaint:false,backgroundColor:'#ffffff',logging:false,width:794,height:1123,windowWidth:1200,scrollX:0,scrollY:0});
+    const canvas=await html2canvas(node,{scale:2,useCORS:true,allowTaint:false,backgroundColor:'#ffffff',logging:false,width:794,height:1123,windowWidth:1200,scrollX:0,scrollY:0,onclone:clonedDocument=>{
+      const source=node.querySelector('.observations textarea');
+      const target=clonedDocument.querySelector('.observations textarea');
+      if(source&&target){
+        const text=clonedDocument.createElement('div');
+        text.className='observations-export';
+        text.textContent=source.value;
+        target.replaceWith(text);
+      }
+    }});
     return await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Não foi possível criar a imagem')),'image/png',1));
   }finally{node.style.transform=previousTransform;node.style.marginBottom=previousMargin}
 }
