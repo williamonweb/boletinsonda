@@ -80,6 +80,7 @@ function newBulletin(ask=true){
   form.reset();currentRecordId=null;currentResponsible='';state.species='canina';state.shift='manha';document.querySelector('input[name=species][value=canina]').checked=true;document.querySelector('input[name=shift][value=manha]').checked=true;form.elements.data.value=new Date().toISOString().slice(0,10);syncHeader();localStorage.removeItem('onda-boletim-draft');document.querySelector('#saveBtn').textContent='Salvar boletim';document.querySelector('.eyebrow').textContent='NOVO BOLETIM';renderHistory();showToast('Novo boletim iniciado');
 }
 let saveTimer;form.addEventListener('input',()=>{statusEl.innerHTML='<span style="background:#e4a73a"></span> Salvando rascunho…';clearTimeout(saveTimer);saveTimer=setTimeout(saveDraft,700)});
+form.elements.comportamentoOutros.addEventListener('input',event=>{if(event.target.value.trim())form.elements.comportamentoOutrosCheck.checked=true});
 document.querySelectorAll('input[name=species]').forEach(el=>el.addEventListener('change',()=>{state.species=el.value;syncHeader();saveDraft()}));
 document.querySelectorAll('input[name=shift]').forEach(el=>el.addEventListener('change',()=>{state.shift=el.value;syncHeader();saveDraft()}));
 document.querySelectorAll('[data-mirror-shift]').forEach(el=>el.addEventListener('change',()=>{state.shift=el.dataset.mirrorShift;document.querySelector(`input[name=shift][value=${state.shift}]`).checked=true;syncHeader();saveDraft()}));
